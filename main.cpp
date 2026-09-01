@@ -14,7 +14,6 @@ private:
     float marks;
 
 public:
-    // Function to take user input
     void inputStudent() {
         cout << "Enter Roll Number: ";
         while (!(cin >> rollNumber)) {
@@ -22,7 +21,7 @@ public:
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        cin.ignore(); // Clear buffer
+        cin.ignore(); 
         cout << "Enter Name: ";
         getline(cin, name);
         cout << "Enter Course: ";
@@ -35,7 +34,7 @@ public:
         }
     }
 
-    // Function to print details in table row format
+    
     void displayRow() const {
         cout << left << setw(12) << rollNumber 
              << setw(20) << name 
@@ -43,21 +42,19 @@ public:
              << setw(8) << fixed << setprecision(2) << marks << endl;
     }
 
-    // Getters
+    
     int getRollNumber() const { return rollNumber; }
     string getName() const { return name; }
     string getCourse() const { return course; }
     float getMarks() const { return marks; }
 
-    // Setters for modification
+    
     void setName(string n) { name = n; }
     void setCourse(string c) { course = c; }
     void setMarks(float m) { marks = m; }
 };
 
-// --- FILE OPERATIONS ---
 
-// 1. Add a new record
 void addStudent() {
     ofstream outFile("students.txt", ios::app);
     if (!outFile) {
@@ -68,7 +65,7 @@ void addStudent() {
     Student s;
     s.inputStudent();
     
-    // Writing data in a pipe-separated flat-file format
+    
     outFile << s.getRollNumber() << "|" 
             << s.getName() << "|" 
             << s.getCourse() << "|" 
@@ -78,7 +75,7 @@ void addStudent() {
     cout << "\nRecord added successfully!\n";
 }
 
-// 2. Display all records
+
 void displayAllStudents() {
     ifstream inFile("students.txt");
     if (!inFile) {
@@ -94,7 +91,7 @@ void displayAllStudents() {
     while (getline(inFile, line)) {
         if (line.empty()) continue;
         
-        // Parsing pipe-separated values
+        
         size_t pos = 0;
         string token;
         string data[4];
@@ -104,7 +101,7 @@ void displayAllStudents() {
             data[i++] = line.substr(0, pos);
             line.erase(0, pos + 1);
         }
-        data[i] = line; // Last item (marks)
+        data[i] = line; 
 
         cout << left << setw(12) << data[0] 
              << setw(20) << data[1] 
@@ -115,7 +112,7 @@ void displayAllStudents() {
     inFile.close();
 }
 
-// 3. Update or Delete records
+
 void modifyStudent(bool isDelete) {
     ifstream inFile("students.txt");
     if (!inFile) {
@@ -134,17 +131,17 @@ void modifyStudent(bool isDelete) {
     while (getline(inFile, line)) {
         if (line.empty()) continue;
 
-        // Peak at the Roll Number
+        
         size_t pos = line.find('|');
         int roll = stoi(line.substr(0, pos));
 
         if (roll == searchRoll) {
             found = true;
             if (isDelete) {
-                // Skip writing this line to temp file to delete it
+                
                 continue; 
             } else {
-                // Get new data for update
+                
                 cout << "\n--- Enter New Details ---\n";
                 Student s;
                 s.inputStudent();
@@ -188,8 +185,8 @@ int main() {
         switch (choice) {
             case 1: addStudent(); break;
             case 2: displayAllStudents(); break;
-            case 3: modifyStudent(false); break; // update
-            case 4: modifyStudent(true);  break; // delete
+            case 3: modifyStudent(false); break; 
+            case 4: modifyStudent(true);  break; 
             case 5: cout << "\nExiting program. Goodbye!\n"; break;
             default: cout << "\nInvalid choice! Please try again.\n";
         }
